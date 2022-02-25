@@ -1,3 +1,5 @@
+
+
 package com.nnk.springboot;
 
 import com.nnk.springboot.domain.BidList;
@@ -44,3 +46,5 @@ public class BidTests {
 		Assert.assertFalse(bidList.isPresent());
 	}
 }
+
+
