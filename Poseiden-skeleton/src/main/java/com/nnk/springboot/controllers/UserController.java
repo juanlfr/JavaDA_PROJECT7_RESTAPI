@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/user/add")
-    public String addUser(User bid) {
+    public String addUser(User user) {
         return "user/add";
     }
 
@@ -91,6 +91,7 @@ public class UserController {
         try {
             Optional<User> userToDelete = userService.findById(id);
             if (userToDelete.isPresent()) {
+                log.info("Deleting user " + userToDelete);
                 userService.delete(userToDelete.get());
             }
         } catch (Exception e) {

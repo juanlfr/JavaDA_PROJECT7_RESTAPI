@@ -35,7 +35,8 @@ public class TradeController {
     }
 
     @GetMapping("/trade/add")
-    public String addUser(Trade bid) {
+    public String addUser(Trade trade, Model model) {
+        model.addAttribute("trade", new Trade());
         return "trade/add";
     }
 
@@ -60,11 +61,11 @@ public class TradeController {
         // TODO: get Trade by Id and to model then show to the form
         Optional<Trade> tradeToUpdate = tradeService.findById(id);
         if (tradeToUpdate.isPresent()) {
-            model.addAttribute("bidListToUpdate", tradeToUpdate.get());
+            model.addAttribute("tradeToUpdate", tradeToUpdate.get());
         } else {
             log.error("trade id not found");
         }
-        return "trade/update/" + id;
+        return "trade/update";
     }
 
     @PostMapping("/trade/update/{id}")
@@ -72,16 +73,16 @@ public class TradeController {
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Trade and return Trade list
         if (result.hasErrors()) {
-            return "trade/update/" + id;
+            return "trade/update";
         }
         try {
             Optional<Trade> tradeToUpdate = tradeService.findById(id);
             if (tradeToUpdate.isPresent()) {
                 tradeToUpdate.get().setAccount(trade.getAccount());
                 tradeToUpdate.get().setType(trade.getType());
-
+                tradeToUpdate.get().setBuyQuantity(trade.getBuyQuantity());
                 tradeService.createTrade(tradeToUpdate.get());
-                log.info("Updating trade" + trade.toString());
+                log.info("Updating trade" + trade);
             } else {
                 log.error("trade id not found");
             }

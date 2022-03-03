@@ -28,14 +28,15 @@ public class RuleNameController {
     public String home(Model model)
     {
         // TODO: find all RuleName, add to model
-        List<RuleName> ratingList = ruleNameService.findAll();
-        log.info("finding all ratings");
-        model.addAttribute("ratingList", ratingList);
+        List<RuleName> ruleNameList = ruleNameService.findAll();
+        log.info("finding all rule names");
+        model.addAttribute("ruleNameList", ruleNameList);
         return "ruleName/list";
     }
 
     @GetMapping("/ruleName/add")
-    public String addRuleForm(RuleName bid) {
+    public String addRuleForm(RuleName ruleName, Model model) {
+        model.addAttribute("ruleName", new RuleName());
         return "ruleName/add";
     }
 
@@ -64,7 +65,7 @@ public class RuleNameController {
         } else {
             log.error("Rule name id not found");
         }
-        return "ruleName/update/" + id;
+        return "ruleName/update";
     }
 
     @PostMapping("/ruleName/update/{id}")
@@ -72,7 +73,7 @@ public class RuleNameController {
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update RuleName and return RuleName list
         if (result.hasErrors()) {
-            return "ruleName/update/" + id;
+            return "ruleName/update";
         }
         try {
             Optional<RuleName> ruleNameToUpdate = ruleNameService.findById(id);

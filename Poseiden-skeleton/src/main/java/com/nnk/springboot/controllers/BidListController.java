@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,23 +33,25 @@ public class BidListController {
     }
 
     @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
+    public String addBidForm(BidList bid, Model model) {
+        model.addAttribute("bid", new BidList());
         return "bidList/add";
     }
 
     @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
+    public String validate(@ModelAttribute("bid") @Valid BidList bid, BindingResult result) {
 
         // TODO: check data valid and save to db, after saving return bid list
+        log.info("validate bid method");
         if (result.hasErrors()) {
             return "bidList/add";
         }
         try {
-            BidList bidList = bidListService.createBidList(bid);
-            log.info("Creating bid" + bidList.toString());
+            bidListService.createBidList(bid);
+            log.info("Creating bid" + bid );
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Error while saving bid:" + e);
+            log.error("Error Creating bid");
         }
         return "redirect:/bidList/list";
     }

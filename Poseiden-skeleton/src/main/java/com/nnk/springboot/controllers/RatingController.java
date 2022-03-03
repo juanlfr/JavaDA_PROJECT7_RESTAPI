@@ -34,7 +34,8 @@ public class RatingController {
     }
 
     @GetMapping("/rating/add")
-    public String addRatingForm(Rating rating) {
+    public String addRatingForm(Rating rating, Model model) {
+        model.addAttribute("rating", new Rating());
         return "rating/add";
     }
 
@@ -59,11 +60,11 @@ public class RatingController {
         // TODO: get Rating by Id and to model then show to the form
         Optional<Rating> ratingToUpdate = ratingService.findById(id);
         if (ratingToUpdate.isPresent()) {
-            model.addAttribute("bidListToUpdate", ratingToUpdate.get());
+            model.addAttribute("ratingToUpdate", ratingToUpdate.get());
         } else {
             log.error("Rating id not found");
         }
-        return "rating/update/" + id;
+        return "rating/update";
     }
 
     @PostMapping("/rating/update/{id}")
