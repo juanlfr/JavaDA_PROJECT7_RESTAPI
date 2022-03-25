@@ -1,5 +1,6 @@
 package com.nnk.springboot.services;
 
+import com.nnk.springboot.domain.DTO.UserDTO;
 import com.nnk.springboot.domain.User;
 
 import java.util.List;
@@ -9,9 +10,12 @@ public interface UserService {
 
     List<User> findAll();
 
-    User createUser(User user);
+    User createUser(UserDTO userDTO);
+
+    Optional<User> findByIdAndUpdate(Integer id, UserDTO userDTO);
 
     Optional<User> findById(Integer id);
 
     void delete(User user);
+
 }

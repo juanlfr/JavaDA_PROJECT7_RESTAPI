@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="navbar"class="row">
+    <div class="col-6">
+        <a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
+        <a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
+        <a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
+        <a href="/trade/list">Trade</a>&nbsp;|&nbsp;
+        <a href="/ruleName/list">Rule</a>
+    </div>
+    <div class="col-6 text-right">
+        Logged in user: <b th:inline="text"  class="user" th:with="userName=${T(com.nnk.springboot.services.UtilsService).getCurrentUser()}" th:text="${userName}" ></b>
+        <form th:action="@{/app-logout}" method="POST">
+            <input type="submit" value="Logout"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>

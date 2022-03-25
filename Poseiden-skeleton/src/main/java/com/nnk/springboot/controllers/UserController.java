@@ -1,13 +1,14 @@
 package com.nnk.springboot.controllers;
 
 
+import com.nnk.springboot.domain.DTO.UserDTO;
 import com.nnk.springboot.domain.User;
-import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +27,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/user/list")
     public String home(Model model) {
@@ -36,18 +37,15 @@ public class UserController {
     }
 
     @GetMapping("/user/add")
-    public String addUser(User user) {
+    public String addUser(Model model) {
+        model.addAttribute("user", new UserDTO());
         return "user/add";
     }
 
     @PostMapping("/user/validate")
-    public String validate(@Valid User user, BindingResult result, Model model) {
+    public String validate(@Valid UserDTO userDTO, BindingResult result) {
         if (!result.hasErrors()) {
-            //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            //user.setPassword(encoder.encode(user.getPassword()));
-            userService.createUser(user);
-            //userRepository.save(user);
-            //model.addAttribute("users", userRepository.findAll());
+            userService.createUser(userDTO);
             return "redirect:/user/list";
         }
         return "user/add";
@@ -55,34 +53,28 @@ public class UserController {
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        //User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        Optional<User> userToUpdate = userService.findById(id);
-        //user.setPassword("");
-        model.addAttribute("user", userToUpdate);
+        User userToUpdate = userService.findById(id).get();
+        log.info("Finding user ${userToUpdate} data");
+        model.addAttribute("userToUpdate", userToUpdate);
         return "user/update";
     }
 
     @PostMapping("/user/update/{id}")
-    public String updateUser(@PathVariable("id") Integer id, @Valid User user,
+    public String updateUser(@PathVariable("id") Integer id, @Valid UserDTO userDTO,
                              BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "user/update";
-        }
-        try {
 
-            Optional<User> userToUpdate = userService.findById(id);
-            userToUpdate.get().setUsername(user.getUsername());
-            userToUpdate.get().setFullname(user.getFullname());
-            //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            //user.setPassword(encoder.encode(user.getPassword()));
-            //user.setId(id);
-            //userRepository.save(user);
-            //model.addAttribute("users", userRepository.findAll());
-            userService.createUser(userToUpdate.get());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!result.hasErrors()) {
+            try {
+                userService.findByIdAndUpdate(id, userDTO);
+                log.info("Updating user data");
+                model.addAttribute("userToUpdate", userDTO);
+                return "redirect:/user/list";
+            } catch (Exception e) {
+                log.info("Error while updating user data" + e);
+
+            }
         }
-        return "redirect:/user/list";
+        return "user/update";
     }
 
     @GetMapping("/user/delete/{id}")

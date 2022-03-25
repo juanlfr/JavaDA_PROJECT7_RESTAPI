@@ -75,6 +75,10 @@ public class BidList {
 
     public Integer getBidListId() { return BidListId; }
 
+    public void setBidListId(Integer bidListId) {
+        BidListId = bidListId;
+    }
+
     public String getAccount() {
         return account;
     }
