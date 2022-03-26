@@ -20,13 +20,11 @@ import java.util.Optional;
 @Controller
 public class RatingController {
     private static final Logger log = LogManager.getLogger(RatingController.class);
-    // TODO: Inject Rating service
     @Autowired
     private RatingService ratingService;
 
     @RequestMapping("/rating/list")
     public String home(Model model) {
-        // TODO: find all Rating, add to model
         List<Rating> ratingList = ratingService.findAll();
         log.info("finding all ratings");
         model.addAttribute("ratingList", ratingList);
@@ -41,7 +39,6 @@ public class RatingController {
 
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Rating list
         if (result.hasErrors()) {
             return "rating/add";
         }
@@ -57,22 +54,19 @@ public class RatingController {
 
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Rating by Id and to model then show to the form
-        Optional<Rating> ratingToUpdate = ratingService.findById(id);
-        if (ratingToUpdate.isPresent()) {
-            model.addAttribute("ratingToUpdate", ratingToUpdate.get());
-        } else {
-            log.error("Rating id not found");
-        }
+
+        log.info("Finding rating");
+        Rating rating = ratingService.findById(id).get();
+        model.addAttribute("rating", rating);
         return "rating/update";
     }
 
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
-                               BindingResult result, Model model) {
+                               BindingResult result) {
         // TODO: check required fields, if valid call service to update Rating and return Rating list
         if (result.hasErrors()) {
-            return "rating/update/" + id;
+            return "rating/update";
         }
             try {
                 Optional<Rating> ratingToUpdate = ratingService.findById(id);

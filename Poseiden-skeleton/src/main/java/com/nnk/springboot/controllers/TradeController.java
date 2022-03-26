@@ -20,14 +20,12 @@ import java.util.Optional;
 @Controller
 public class TradeController {
     private static final Logger log = LogManager.getLogger(TradeController.class);
-    // TODO: Inject Trade service
     @Autowired
     private TradeService tradeService;
 
     @RequestMapping("/trade/list")
     public String home(Model model)
     {
-        // TODO: find all Trade, add to model
         List<Trade> tradeList = tradeService.findAll();
         log.info("finding all trades");
         model.addAttribute("tradeList", tradeList);
@@ -42,7 +40,6 @@ public class TradeController {
 
     @PostMapping("/trade/validate")
     public String validate(@Valid Trade trade, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Trade list
         if (result.hasErrors()) {
             return "trade/add";
         }
@@ -58,20 +55,16 @@ public class TradeController {
 
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Trade by Id and to model then show to the form
-        Optional<Trade> tradeToUpdate = tradeService.findById(id);
-        if (tradeToUpdate.isPresent()) {
-            model.addAttribute("tradeToUpdate", tradeToUpdate.get());
-        } else {
-            log.error("trade id not found");
-        }
+        log.info("Finding trade");
+        Trade trade = tradeService.findById(id).get();
+        model.addAttribute("trade", trade );
         return "trade/update";
     }
 
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid Trade trade,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Trade and return Trade list
+                             BindingResult result) {
+
         if (result.hasErrors()) {
             return "trade/update";
         }
@@ -95,7 +88,7 @@ public class TradeController {
 
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Trade by Id and delete the Trade, return to Trade list
+
         try {
             Optional<Trade> tradeToDelete = tradeService.findById(id);
             if (tradeToDelete.isPresent()) {

@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 public class UserDTO {
 
+    private Integer Id;
     @NotBlank(message = "Username is mandatory")
     private String username;
     @ValidPassword
@@ -16,6 +17,7 @@ public class UserDTO {
     @NotBlank(message = "Role is mandatory")
     private String role;
 
+
     public UserDTO(String username, String password, String fullname, String role) {
         this.username = username;
         this.password = password;
@@ -24,6 +26,13 @@ public class UserDTO {
     }
 
     public UserDTO() {
+    }
+    public void setId(Integer id) {
+        this.Id = id;
+    }
+
+    public Integer getId() {
+        return Id;
     }
 
     public String getUsername() {
@@ -67,4 +76,6 @@ public class UserDTO {
                 ", role='" + role + '\'' +
                 '}';
     }
+
+
 }

@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +20,11 @@ import java.util.Optional;
 public class BidListController {
 
     private static final Logger log = LogManager.getLogger(BidListController.class);
-    // TODO: Inject Bid service
     @Autowired
     private BidListService bidListService;
 
     @RequestMapping("/bidList/list")
     public String home(Model model) {
-        // TODO: call service find all bids to show to the view
         List<BidList> bidList = bidListService.findAll();
         log.info("finding all bids");
         model.addAttribute("bidList", bidList);
@@ -43,7 +40,6 @@ public class BidListController {
     @PostMapping("/bidList/validate")
     public String validate(@ModelAttribute("bid") @Valid BidList bid, BindingResult result) {
 
-        // TODO: check data valid and save to db, after saving return bid list
         log.info("validate bid method");
         if (result.hasErrors()) {
             return "bidList/add";
@@ -60,21 +56,17 @@ public class BidListController {
 
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Bid by Id and to model then show to the form
-        Optional<BidList> bidListToUpdate = bidListService.findById(id);
-        if (bidListToUpdate.isPresent()) {
-            model.addAttribute("bidListToUpdate", bidListToUpdate.get());
-        } else {
-            log.error("Bid id not found");
-        }
-        return "bidList/update";
 
+        BidList bidList = bidListService.findById(id).get();
+        log.info("Finding Bid");
+        model.addAttribute("bidList", bidList);
+        return "bidList/update";
     }
 
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
-                            BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
+                            BindingResult result) {
+
         if (result.hasErrors()) {
             return "bidList/update";
         }
@@ -98,7 +90,7 @@ public class BidListController {
 
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
+
         try {
             Optional<BidList> bidListToDelete = bidListService.findById(id);
             if (bidListToDelete.isPresent()) {

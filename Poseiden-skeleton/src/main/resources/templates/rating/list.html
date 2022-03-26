@@ -24,7 +24,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			<!-- TODO: Show all Rating to the table, the Action column will have Edit & Delete buttons -->
+
 				<tr th:each="rating : ${ratingList}">
 					<td style="width: 10%" th:text="${rating.getId()}"></td>
 					<td th:text="${rating.getMoodysRating()}"></td>

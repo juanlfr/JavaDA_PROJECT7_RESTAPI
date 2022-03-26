@@ -18,4 +18,5 @@ public interface UserService {
 
     void delete(User user);
 
+    UserDTO userEntityToDTO(User userToUpdate);
 }

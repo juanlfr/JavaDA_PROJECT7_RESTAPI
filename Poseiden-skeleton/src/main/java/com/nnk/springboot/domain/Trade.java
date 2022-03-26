@@ -1,6 +1,7 @@
 package com.nnk.springboot.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -12,9 +13,10 @@ public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer tradeId ;
-    @NotBlank
+    @NotBlank(message = "Mandatory")
     private String account ;
     private String type ;
+    @Digits(message = "Should be a number", integer = 7, fraction = 2)
     private Double buyQuantity ;
     private Double sellQuantity ;
     private Double buyPrice ;

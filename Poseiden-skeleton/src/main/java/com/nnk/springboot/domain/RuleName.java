@@ -10,8 +10,10 @@ public class RuleName {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id ;
+    @NotBlank(message = "Mandatory")
     private String name ;
     private String description ;
+    @NotBlank(message = "Mandatory")
     private String json ;
     private String template ;
     private String sqlStr ;

@@ -54,7 +54,7 @@ public class WebAppSecurityTest {
 
     @Test
     public void userLoginTest () throws Exception {
-        mock.perform(formLogin("/login").user("juan").password("juan")).andExpect(authenticated());
+        mock.perform(formLogin("/login").user("admin").password("admin")).andExpect(authenticated());
     }
     @Test
     public void userLoginFailTest() throws Exception {

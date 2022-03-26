@@ -20,14 +20,12 @@ import java.util.Optional;
 @Controller
 public class RuleNameController {
     private static final Logger log = LogManager.getLogger(RuleNameController.class);
-    // TODO: Inject RuleName service
     @Autowired
     private RuleNameService ruleNameService;
 
     @RequestMapping("/ruleName/list")
     public String home(Model model)
     {
-        // TODO: find all RuleName, add to model
         List<RuleName> ruleNameList = ruleNameService.findAll();
         log.info("finding all rule names");
         model.addAttribute("ruleNameList", ruleNameList);
@@ -42,7 +40,6 @@ public class RuleNameController {
 
     @PostMapping("/ruleName/validate")
     public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return RuleName list
         if (result.hasErrors()) {
             return "ruleName/add";
         }
@@ -58,20 +55,15 @@ public class RuleNameController {
 
     @GetMapping("/ruleName/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get RuleName by Id and to model then show to the form
-        Optional<RuleName> ruleNameToUpdate = ruleNameService.findById(id);
-        if (ruleNameToUpdate.isPresent()) {
-            model.addAttribute("ruleNameToUpdate", ruleNameToUpdate.get());
-        } else {
-            log.error("Rule name id not found");
-        }
+        RuleName ruleName = ruleNameService.findById(id).get();
+        model.addAttribute("ruleName", ruleName);
+
         return "ruleName/update";
     }
 
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleName ruleName,
                              BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update RuleName and return RuleName list
         if (result.hasErrors()) {
             return "ruleName/update";
         }

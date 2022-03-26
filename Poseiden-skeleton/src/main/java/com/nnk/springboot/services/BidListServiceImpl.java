@@ -25,7 +25,7 @@ public class BidListServiceImpl implements BidListService {
 
     @Override
     public Optional<BidList> findById(Integer id) {
-        return bidListRepository.findById(id);
+        return Optional.ofNullable(bidListRepository.findById(id).orElseThrow((() -> new IllegalArgumentException("Invalid user Id:" + id))));
     }
 
     @Override

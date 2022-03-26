@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public Optional<User> findByIdAndUpdate(Integer id, UserDTO userDTO) {
 
-        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        User userToUpdate = findById(id).get();
 
         if (userDTO.getUsername() != null && !userDTO.getUsername().isEmpty()) {
             userToUpdate.setUsername(userDTO.getUsername());
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         userRepository.save(userToUpdate);
 
-        return userRepository.findById(id);
+        return Optional.of(userToUpdate);
     }
 
     @Override
@@ -76,6 +76,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.setFullname(userDTO.getFullname());
         user.setRole(userDTO.getRole());
         return user;
+    }
+    public UserDTO userEntityToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDTO.setUsername(user.getUsername());
+        userDTO.setFullname(user.getFullname());
+        userDTO.setRole(user.getRole());
+        return userDTO;
     }
 
 }

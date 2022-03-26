@@ -21,7 +21,6 @@ import java.util.Optional;
 @Controller
 public class CurveController {
     private static final Logger log = LogManager.getLogger(CurveController.class);
-    // TODO: Inject Curve Point service
     @Autowired
     private CurvePointService curvePointService;
 
@@ -35,14 +34,14 @@ public class CurveController {
     }
 
     @GetMapping("/curvePoint/add")
-    public String addBidForm(CurvePoint bid, Model model) {
+    public String addBidForm(CurvePoint curvePoint, Model model) {
         model.addAttribute("curvePoint", new CurvePoint());
         return "curvePoint/add";
     }
 
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return Curve list
+
         if (result.hasErrors()) {
             return "curvePoint/add";
         }
@@ -58,21 +57,17 @@ public class CurveController {
 
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        Optional<CurvePoint> curvePointToUpdate = curvePointService.findById(id);
-        if (curvePointToUpdate.isPresent()) {
-            model.addAttribute("curvePointToUpdate", curvePointToUpdate.get());
-        } else {
-            log.error("curvePoint id not found");
-        }
+        log.info("Finding curve");
+        CurvePoint curvePoint = curvePointService.findById(id).get();
+        model.addAttribute("curvePoint", curvePoint);
         return "curvePoint/update";
     }
 
     @PostMapping("/curvePoint/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Curve and return Curve list
+                             BindingResult result) {
         if (result.hasErrors()) {
-            return "redirect:/curvePoint/update/" + id;
+            return "curvePoint/update";
         }
         try {
             Optional<CurvePoint> curvePointToUpdate = curvePointService.findById(id);
@@ -94,7 +89,6 @@ public class CurveController {
 
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Curve by Id and delete the Curve, return to Curve list
         try {
             Optional<CurvePoint> bidListToDelete = curvePointService.findById(id);
             if (bidListToDelete.isPresent()) {

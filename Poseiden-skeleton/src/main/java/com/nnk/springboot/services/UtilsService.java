@@ -21,9 +21,11 @@ import java.util.*;
 
 @Service
 public final class UtilsService {
-
+    /**
+     * Static method that identifies the authenticated user whether authentication by login/password or OAuth2 Authentication
+     * @return the user name of the authenticated user
+     */
     public static String getCurrentUser() {
-
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof UsernamePasswordAuthenticationToken) {

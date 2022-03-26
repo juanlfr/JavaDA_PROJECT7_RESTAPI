@@ -1,6 +1,7 @@
 package com.nnk.springboot.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -12,9 +13,11 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id ;
+    @NotBlank(message = "Mandatory")
     private String moodysRating ;
     private String sandPRating ;
     private String fitchRating ;
+    @Digits(message = "Should be a number", integer = 7, fraction = 2)
     private Integer orderNumber ;
 
     public Rating(String moodysRating, String sandPRating, String fitchRating, Integer orderNumber) {
