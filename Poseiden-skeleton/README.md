@@ -29,3 +29,5 @@
 ## Security
 1. Create user service to load user from  database and place in package com.nnk.springboot.services
 2. Add configuration class and place in package com.nnk.springboot.config
+
+Note: To run the application with the OAuth2 authentications a client ID and a client secret are needed.
